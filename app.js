@@ -56,15 +56,19 @@ function evaluateKeyPressed(selectedKeyCodeWithHash) {
     updateTargetLetter();
     nudgeYellowBlock();
 }
+function clearChecksAndXs() {
+    var $icons = $(".ui-icon");
+    $icons.remove();
+}
 
 function nudgeYellowBlock() {
-    
     var pixelValueAsString = $yellowBlock.css("left");
     var numberOfPixels = getNumberOfPixels(pixelValueAsString);
     if (isLastLetterInWord) {
         if (isLastLetterInSentence) {
             resetYellowBlock();
             updateSentence();
+            clearChecksAndXs();
             resetFlags();
             return;
         }
@@ -146,21 +150,16 @@ function getNumberOfPixels(pixelValueAsString) {
 }
 
 function displayAppropriateSymbol(characterInput) {
+    var $div = $("#feedback");
     if (characterInput == currentCharacter) {
         numberOfCorrectKeysPressed++;
-        // var $span = $("<span></span>");
-        // $span.addClass('.ui-icon .ui-icon-check');
-        var $span = $("<span class='ui-icon ui-icon-check'></span>");  
-        $span.appendTo($("#feedback")); 
-        console.log("correct letter!");
+        var $span = $("<span class='ui-icon ui-icon-check glyphicon-ok'></span>");  
     }
     else {
         numberOfMistakes++;
-        // display red X
-        // .ui-icon-closethick");
-        // alert("WRONG letter!");
-        //  console.log("WRONG letter!");
+        var $span = $("<span class='ui-icon ui-icon-closethick glyphicon-remove'></span>"); 
     }
+    $span.appendTo($div); 
 }
 
 function atEndOfSentence() {
