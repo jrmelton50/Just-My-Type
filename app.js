@@ -24,6 +24,9 @@ function main() {
     startDate = new Date(); // For now, the game starts when the page loads. I want to start the timer when the user presses a key for the first time.
     $lowerCaseKeyboard = $("#keyboard-lower-container");
     $upperCaseKeyboard = $("#keyboard-upper-container");
+    $sentenceDiv = $("#sentence");
+    $targetLetter = $("#target-letter");
+    $yellowBlock = $("#yellow-block");
     sentences = ['ten ate neite ate nee enet ite ate inet ent eate', 'Too ato too nOt enot one totA not anot tOO aNot', 'oat itain oat tain nate eate tea anne inant nean', 'itant eate anot eat nato inate eat anot tain eat', 'nee ene ate ite tent tiet ent ine ene ete ene ate'];
     currentSentenceIndex = 0;
     currentSentence = sentences[currentSentenceIndex];
@@ -35,29 +38,28 @@ function main() {
     numberOfCorrectKeysPressed = 0;
     numberOfMistakes = 0;
     numberOfWords = calculateNumberOfWords();
-    $sentenceDiv = $("#sentence");
-    $targetLetter = $("#target-letter");
-    $yellowBlock = $("#yellow-block");
+
 
     $currentSentenceAsParagraph.attr("id", "currentSentence");
     $upperCaseKeyboard.css("display", "none");
     $currentSentenceAsParagraph.appendTo($sentenceDiv);
-    updateTargetLetter(null);
+    updateTargetLetter();
     resetYellowBlock();
 }
 
 // Helper functions
 function evaluateKeyPressed(selectedKeyCodeWithHash) {
+    console.log("selectedKeyCodeWithHash " + selectedKeyCodeWithHash);
     currentCharacter = currentSentence[currentCharacterIndex];
     displayAppropriateSymbol(String.fromCharCode(removeHash(selectedKeyCodeWithHash)));
     isLastLetterInSentence = atEndOfSentence();
     isLastLetterInWord = atEndOfWord();
     currentCharacterIndex++;
-    updateTargetLetter(String.fromCharCode(removeHash(selectedKeyCodeWithHash)));
     nudgeYellowBlock();
+    updateTargetLetter();
 }
 function clearChecksAndXs() {
-    var $icons = $(".ui-icon");
+    var $icons = $(".glyphicon");
     $icons.remove();
 }
 
@@ -109,8 +111,9 @@ function removeHash(str) {
     return parseInt(str[1] + str[2]) + str[3];
 }
 
-function updateTargetLetter(str) {
+function updateTargetLetter() {
     currentCharacter = currentSentence[currentCharacterIndex];
+    console.log("currentCharacter = " + currentCharacter);
     if (currentCharacter.charCodeAt(0) == "32") {
         $targetLetter.text("space");
     }
@@ -134,7 +137,7 @@ function updateSentence() {
     currentSentence = sentences[currentSentenceIndex];
     $("#currentSentence").text(currentSentence);
     resetCharacterIndex();
-    updateTargetLetter(null);
+    updateTargetLetter();
 }
 
 function resetFlags() {
@@ -157,11 +160,11 @@ function displayAppropriateSymbol(characterInput) {
     var $div = $("#feedback");
     if (characterInput == currentCharacter) {
         numberOfCorrectKeysPressed++;
-        var $span = $("<span class='ui-icon ui-icon-check glyphicon-ok'></span>");
+        var $span = $("<span class='glyphicon glyphicon-ok'></span>");
     }
     else {
         numberOfMistakes++;
-        var $span = $("<span class='ui-icon ui-icon-closethick glyphicon-remove'></span>");
+        var $span = $("<span class='glyphicon glyphicon-remove'></span>");
     }
     $span.appendTo($div);
 }
@@ -245,9 +248,6 @@ function calculateNumberOfWords() {
     }
     return count;
 }
-
-
-
 
 // Key action detectors 
 $(document).keydown(function (e) {

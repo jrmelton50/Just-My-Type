@@ -16,7 +16,7 @@
   height: 15px;
   background-color: yellow;
 
-  /* Jessie added the following lines of code */
+  /* Jessie added the following lines of code and commented out line 15*/
   width: 20px;
   left: 29px;
 }
@@ -27,7 +27,6 @@
 
 #target-letter {
   font-size: 38px; 
-  /* border: 1px, solid, red;    This area is not visible... */
 }
 
 .keys-row {
@@ -46,7 +45,7 @@
   color : #CD2626
 }
 
-/* My code */
+/* Jessie added this code */
 .highlighted {
   background-color: yellow;
 }
