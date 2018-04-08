@@ -45,11 +45,11 @@ function main() {
     $currentSentenceAsParagraph.appendTo($sentenceDiv);
     updateTargetLetter();
     resetYellowBlock();
+    clearChecksAndXs();
 }
 
 // Helper functions
 function evaluateKeyPressed(selectedKeyCodeWithHash) {
-    console.log("selectedKeyCodeWithHash " + selectedKeyCodeWithHash);
     currentCharacter = currentSentence[currentCharacterIndex];
     displayAppropriateSymbol(String.fromCharCode(removeHash(selectedKeyCodeWithHash)));
     isLastLetterInSentence = atEndOfSentence();
@@ -113,8 +113,8 @@ function removeHash(str) {
 
 function updateTargetLetter() {
     currentCharacter = currentSentence[currentCharacterIndex];
-    console.log("currentCharacter = " + currentCharacter);
-    if (currentCharacter.charCodeAt(0) == "32") {
+    // console.log("currentCharacter = " + currentCharacter);
+    if (currentCharacter != null && currentCharacter.charCodeAt(0) == "32") {
         $targetLetter.text("space");
     }
     else {
