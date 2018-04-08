@@ -42,7 +42,7 @@ function main() {
     $currentSentenceAsParagraph.attr("id", "currentSentence");
     $upperCaseKeyboard.css("display", "none");
     $currentSentenceAsParagraph.appendTo($sentenceDiv);
-    updateTargetLetter();
+    updateTargetLetter(null);
     resetYellowBlock();
 }
 
@@ -53,7 +53,7 @@ function evaluateKeyPressed(selectedKeyCodeWithHash) {
     isLastLetterInSentence = atEndOfSentence();
     isLastLetterInWord = atEndOfWord();
     currentCharacterIndex++;
-    updateTargetLetter();
+    updateTargetLetter(String.fromCharCode(removeHash(selectedKeyCodeWithHash)));
     nudgeYellowBlock();
 }
 function clearChecksAndXs() {
@@ -82,7 +82,6 @@ function nudgeYellowBlock() {
     var newNumAsStringWithPX = (numberOfPixels.toString()) + "px";
     $yellowBlock.css("left", newNumAsStringWithPX);
     resetFlags();
-
 }
 
 function resetYellowBlock() {
@@ -110,9 +109,14 @@ function removeHash(str) {
     return parseInt(str[1] + str[2]) + str[3];
 }
 
-function updateTargetLetter() {
+function updateTargetLetter(str) {
     currentCharacter = currentSentence[currentCharacterIndex];
-    $targetLetter.text(currentCharacter);
+    if (currentCharacter.charCodeAt(0) == "32") {
+        $targetLetter.text("space");
+    }
+    else {
+        $targetLetter.text(currentCharacter);
+    }
 }
 
 function clearSentenceAndYellowBlock() {
@@ -130,7 +134,7 @@ function updateSentence() {
     currentSentence = sentences[currentSentenceIndex];
     $("#currentSentence").text(currentSentence);
     resetCharacterIndex();
-    updateTargetLetter();
+    updateTargetLetter(null);
 }
 
 function resetFlags() {
@@ -153,13 +157,13 @@ function displayAppropriateSymbol(characterInput) {
     var $div = $("#feedback");
     if (characterInput == currentCharacter) {
         numberOfCorrectKeysPressed++;
-        var $span = $("<span class='ui-icon ui-icon-check glyphicon-ok'></span>");  
+        var $span = $("<span class='ui-icon ui-icon-check glyphicon-ok'></span>");
     }
     else {
         numberOfMistakes++;
-        var $span = $("<span class='ui-icon ui-icon-closethick glyphicon-remove'></span>"); 
+        var $span = $("<span class='ui-icon ui-icon-closethick glyphicon-remove'></span>");
     }
-    $span.appendTo($div); 
+    $span.appendTo($div);
 }
 
 function atEndOfSentence() {
@@ -214,16 +218,14 @@ function askUserToPlayAgain() {
 
 function restartGame() {
     $("#prompt").css("display", "none");
-    // $("#prompt").hide();
     main();
 }
 
 function stopTimer() {
-    // At this point,the game is over
     endDate = new Date();
     var minutes = calculateDuration();
     $targetLetter.text("Score: " + Math.floor(numberOfCorrectKeysPressed / minutes - 2 * numberOfMistakes));
-    setTimeout(function() {
+    setTimeout(function () {
         askUserToPlayAgain();
     }, 3000);
 }
